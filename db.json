@@ -1,0 +1,40 @@
+{
+  "todos": [
+    {
+      "id": "3f0c7081-c24c-4e65-9ceb-5fcb56fa2c3c",
+      "text": "organizar a casa",
+      "completed": true,
+      "created_at": "2025-07-07T10:20:02.666876",
+      "due_date": "2025-07-12",
+      "notes": "limpar o quarto e a sala",
+      "priority": "high",
+      "updated_at": "2025-07-07T10:20:05.577867"
+    },
+    {
+      "id": "f046ca07-02dd-42e6-8128-99f7be1b5167",
+      "text": "limpar o carro",
+      "completed": false,
+      "created_at": "2025-07-07T10:20:31.532279",
+      "due_date": "2025-07-15",
+      "notes": "limpar a porsche",
+      "priority": "urgent"
+    }
+  ],
+  "events": [],
+  "chat_history": [
+    {
+      "id": "3d4efa60-1965-4a55-9ef7-932724364018",
+      "user": "eu tenho algo para fazer?",
+      "bot": "Olá!  Sim, você tem uma tarefa pendente: \"arrumar a casa\".  Ela foi criada hoje e tem prazo para o dia 14 de julho.  Ainda tem uma semana para concluí-la.  \n\nVocê gostaria que eu te ajudasse a organizar como você vai fazer isso?  Talvez possamos criar uma lista de tarefas menores para tornar o processo mais fácil.  Por exemplo, podemos dividir em \"limpar a cozinha\", \"limpar o banheiro\", \"aspirar a casa\", etc.  O que você acha?\n",
+      "timestamp": "2025-07-07T10:13:37.083969",
+      "has_file": false
+    },
+    {
+      "id": "337e712f-7201-4a88-b52f-d840d3a68bb6",
+      "user": "oque eu tenho para fazer?",
+      "bot": "Olá!  Você tem algumas coisas na sua lista de tarefas.  Uma já foi concluída: parabéns por organizar a casa! 🎉\n\nVocê ainda tem a tarefa de **limpar o carro**, com prazo para o dia 15 de julho.  Ainda dá tempo, mas é bom lembrar para não deixar para a última hora.  \n\nGostaria de ajuda para planejar como vai limpar o carro? Podemos criar uma pequena lista de verificação, como:\n\n* Lavar a lataria\n* Limpar os vidros\n* Aspirar o interior\n* Limpar o painel\n* Limpar o porta-malas\n\nO que acha?  Podemos adicionar mais itens se você quiser.  Além disso, posso te lembrar quando estiver se aproximando o prazo para limpar o carro.\n",
+      "timestamp": "2025-07-07T10:20:45.265687",
+      "has_file": false
+    }
+  ]
+}

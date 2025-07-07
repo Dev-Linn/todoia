@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant Hub</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h1><i class="fas fa-robot"></i> AI Hub</h1>
+            </div>
+            <div class="nav-items">
+                <button class="nav-item active" data-tab="todo">
+                    <i class="fas fa-tasks"></i>
+                    <span>To-Do Inteligente</span>
+                </button>
+                <button class="nav-item" data-tab="chat">
+                    <i class="fas fa-comments"></i>
+                    <span>Chat AI</span>
+                </button>
+                <button class="nav-item" data-tab="calendar">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Calendário Smart</span>
+                </button>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <!-- TODO SECTION -->
+            <section id="todo" class="tab-content active">
+                <div class="section-header">
+                    <h2><i class="fas fa-tasks"></i> To-Do Inteligente</h2>
+                    <p>Organize suas tarefas com sugestões de IA</p>
+                </div>
+                
+                <div class="todo-input-container">
+                    <div class="input-form">
+                        <div class="input-group">
+                            <input type="text" id="todo-input" placeholder="Digite sua tarefa e pressione Enter ou clique Adicionar...">
+                            <button type="button" id="add-todo-btn" class="btn-primary">
+                                <i class="fas fa-plus"></i> Adicionar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="todo-filters">
+                    <button class="filter-btn active" data-filter="all">
+                        <i class="fas fa-list"></i> Todas
+                    </button>
+                    <button class="filter-btn" data-filter="pending">
+                        <i class="fas fa-clock"></i> Pendentes
+                    </button>
+                    <button class="filter-btn" data-filter="completed">
+                        <i class="fas fa-check"></i> Concluídas
+                    </button>
+                    <button class="filter-btn" data-filter="overdue">
+                        <i class="fas fa-exclamation-triangle"></i> Vencidas
+                    </button>
+                    <button class="filter-btn" data-filter="upcoming">
+                        <i class="fas fa-fire"></i> Urgentes
+                    </button>
+                </div>
+
+                <div class="todo-stats">
+                    <div class="stat-item">
+                        <span class="stat-number" id="total-todos">0</span>
+                        <span class="stat-label">Total</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="pending-todos">0</span>
+                        <span class="stat-label">Pendentes</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="completed-todos">0</span>
+                        <span class="stat-label">Concluídas</span>
+                    </div>
+                    <div class="stat-item overdue">
+                        <span class="stat-number" id="overdue-todos">0</span>
+                        <span class="stat-label">Vencidas</span>
+                    </div>
+                </div>
+                
+                <div class="todo-list-container">
+                    <ul id="todo-list" class="todo-list"></ul>
+                </div>
+
+                <!-- Modal para adicionar tarefa -->
+                <div id="todo-modal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3><i class="fas fa-plus-circle"></i> Nova Tarefa</h3>
+                            <button class="modal-close" id="close-modal">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="todo-modal-form">
+                                <div class="form-group">
+                                    <label for="task-description">Descrição da Tarefa *</label>
+                                    <input type="text" id="task-description" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="task-due-date">Data Limite</label>
+                                    <input type="date" id="task-due-date">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="task-notes">Observações</label>
+                                    <textarea id="task-notes" rows="3" placeholder="Adicione observações ou detalhes..."></textarea>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Prioridade</label>
+                                    <div class="priority-buttons">
+                                        <button type="button" class="priority-btn" data-priority="low">
+                                            <i class="fas fa-circle" style="color: #28a745;"></i> Tranquilo
+                                        </button>
+                                        <button type="button" class="priority-btn active" data-priority="normal">
+                                            <i class="fas fa-circle" style="color: #667eea;"></i> Normal
+                                        </button>
+                                        <button type="button" class="priority-btn" data-priority="high">
+                                            <i class="fas fa-circle" style="color: #ffc107;"></i> Importante
+                                        </button>
+                                        <button type="button" class="priority-btn" data-priority="urgent">
+                                            <i class="fas fa-circle" style="color: #dc3545;"></i> Urgente
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="modal-actions">
+                                    <button type="button" class="btn-secondary" id="cancel-todo">Cancelar</button>
+                                    <button type="button" class="btn-primary" id="submit-todo">
+                                        <i class="fas fa-plus"></i> Adicionar Tarefa
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CHAT SECTION -->
+            <section id="chat" class="tab-content">
+                <div class="section-header">
+                    <h2><i class="fas fa-comments"></i> Chat AI</h2>
+                    <p>Converse com IA e envie arquivos</p>
+                </div>
+
+                <div class="chat-container">
+                    <div id="chat-messages" class="chat-messages">
+                        <div class="message bot-message">
+                            <div class="message-avatar">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div class="message-content">
+                                <p>Olá! Sou seu assistente AI. Como posso ajudar você hoje?</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form id="chat-form" class="chat-input-form">
+                        <div class="chat-input-container">
+                            <input type="file" id="file-input" accept=".txt,.pdf,.doc,.docx,.jpg,.png" style="display: none;">
+                            <button type="button" id="file-btn" class="btn-file">
+                                <i class="fas fa-paperclip"></i>
+                            </button>
+                            <input type="text" id="chat-input" placeholder="💬 Escreva sua mensagem aqui..." required>
+                            <button type="submit" class="btn-send">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                        <div id="file-preview" class="file-preview"></div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- CALENDAR SECTION -->
+            <section id="calendar" class="tab-content">
+                <div class="section-header">
+                    <h2><i class="fas fa-calendar-alt"></i> Calendário Smart</h2>
+                    <p>Visualize tarefas e eventos em um só lugar</p>
+                </div>
+
+                <div class="calendar-view">
+                    <div class="calendar-header">
+                        <button id="prev-month" class="btn-nav">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <h3 id="current-month"></h3>
+                        <button id="next-month" class="btn-nav">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    <div class="calendar-weekdays">
+                        <div class="weekday">Dom</div>
+                        <div class="weekday">Seg</div>
+                        <div class="weekday">Ter</div>
+                        <div class="weekday">Qua</div>
+                        <div class="weekday">Qui</div>
+                        <div class="weekday">Sex</div>
+                        <div class="weekday">Sáb</div>
+                    </div>
+                    <div id="calendar-grid" class="calendar-grid"></div>
+                </div>
+
+                <div class="calendar-sidebar">
+                    <div class="upcoming-section">
+                        <h4><i class="fas fa-clock"></i> Próximos</h4>
+                        <div id="upcoming-items"></div>
+                    </div>
+                    
+                    <div class="events-section">
+                        <h4><i class="fas fa-calendar-check"></i> Eventos</h4>
+                        <div id="events-container"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="loading" class="loading">
+        <div class="spinner"></div>
+        <p>Processando com IA...</p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
