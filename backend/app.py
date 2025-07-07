@@ -597,7 +597,15 @@ def health_check():
 
 if __name__ == '__main__':
     print("🚀 Iniciando AI Assistant Hub...")
-    print("📱 Frontend: http://localhost:5000")
-    print("🔧 API: http://localhost:5000/api/")
+    
+    # Configurações para produção no Railway
+    import os
+    port = int(os.environ.get('PORT', 5000))
+    debug = os.environ.get('DEBUG', 'False').lower() == 'true'
+    
+    print(f"📱 Frontend: http://0.0.0.0:{port}")
+    print(f"🔧 API: http://0.0.0.0:{port}/api/")
     print("🤖 Gemini API: Configurada")
-    app.run(debug=True, host='0.0.0.0', port=5000) 
+    print(f"🌐 Modo: {'Debug' if debug else 'Produção'}")
+    
+    app.run(debug=debug, host='0.0.0.0', port=port) 
