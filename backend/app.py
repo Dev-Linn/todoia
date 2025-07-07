@@ -14,7 +14,36 @@ import base64
 from config import GEMINI_API_KEY, GEMINI_API_URL, UPLOAD_FOLDER, ALLOWED_EXTENSIONS, DB_FILE
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, 
+     origins=["*"],
+     methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+     allow_headers=["Content-Type", "Authorization"],
+     supports_credentials=True)
+
+# Configurar logs de erro mais detalhados
+import logging
+logging.basicConfig(level=logging.DEBUG)
+
+# Middleware para capturar erros de parsing JSON
+@app.before_request
+def log_request_info():
+    print(f"🌐 {request.method} {request.path}")
+    if request.method == 'POST' and request.content_type:
+        print(f"📋 Content-Type: {request.content_type}")
+        if 'application/json' in request.content_type:
+            try:
+                data = request.get_json()
+                print(f"📥 JSON Data: {data}")
+            except Exception as e:
+                print(f"❌ Erro ao parsear JSON: {e}")
+
+# Handler de erro global
+@app.errorhandler(Exception)
+def handle_exception(e):
+    print(f"❌ Erro não tratado: {e}")
+    import traceback
+    traceback.print_exc()
+    return jsonify({'success': False, 'message': f'Erro interno: {str(e)}'}), 500
 
 def load_db():
     try:
@@ -281,13 +310,25 @@ def get_todos():
 @app.route('/api/todos', methods=['POST'])
 def add_todo():
     try:
+        print("🔧 Iniciando add_todo...")
+        
+        # Verificar se há dados JSON
         data = request.json
+        print(f"📥 Dados recebidos: {data}")
+        
+        if not data:
+            print("⚠️ Nenhum dado JSON fornecido")
+            return jsonify({'success': False, 'message': 'Dados não fornecidos'}), 400
+            
         text = data.get('text', '').strip()
         due_date = data.get('due_date')
         notes = data.get('notes', '').strip()
         priority = data.get('priority', 'normal')
         
+        print(f"📝 Texto: '{text}', Data: '{due_date}', Notas: '{notes}', Prioridade: '{priority}'")
+        
         if not text:
+            print("⚠️ Texto da tarefa vazio")
             return jsonify({'success': False, 'message': 'Texto da tarefa é obrigatório'}), 400
         
         # Validar prioridade
@@ -295,12 +336,14 @@ def add_todo():
         if priority not in valid_priorities:
             priority = 'normal'
         
-        # Carregar dados
-        with open(DB_FILE, 'r', encoding='utf-8') as f:
-            db_data = json.load(f)
+        print("📂 Carregando banco de dados...")
+        # Carregar dados usando a função robusta
+        db_data = load_db()
+        print(f"✅ Banco carregado: {len(db_data.get('todos', []))} todos existentes")
         
         # Gerar ID único
         todo_id = str(uuid.uuid4())
+        print(f"🆔 ID gerado: {todo_id}")
         
         # Criar nova tarefa
         new_todo = {
@@ -308,22 +351,29 @@ def add_todo():
             'text': text,
             'completed': False,
             'created_at': datetime.now().isoformat(),
-            'due_date': due_date,
+            'due_date': due_date if due_date else None,
             'notes': notes if notes else None,
             'priority': priority
         }
         
+        print(f"📋 Nova tarefa criada: {new_todo}")
+        
         # Adicionar à lista
         db_data['todos'].append(new_todo)
+        print(f"➕ Tarefa adicionada. Total: {len(db_data['todos'])}")
         
-        # Salvar no banco
-        with open(DB_FILE, 'w', encoding='utf-8') as f:
-            json.dump(db_data, f, ensure_ascii=False, indent=2)
+        # Salvar usando a função robusta
+        print("💾 Salvando no banco...")
+        save_db(db_data)
+        print("✅ Banco salvo com sucesso")
         
         return jsonify({'success': True, 'todo': new_todo})
         
     except Exception as e:
-        return jsonify({'success': False, 'message': str(e)}), 500
+        print(f"❌ Erro ao adicionar todo: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({'success': False, 'message': f'Erro interno do servidor: {str(e)}'}), 500
 
 @app.route('/api/todos/<todo_id>', methods=['PUT'])
 def update_todo(todo_id):
