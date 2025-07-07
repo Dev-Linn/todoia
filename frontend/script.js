@@ -569,18 +569,31 @@ class ChatManager {
         const fileBtn = document.getElementById('file-btn');
         const fileInput = document.getElementById('file-input');
 
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            await this.sendMessage();
-        });
+        // Remover event listeners existentes para evitar duplicatas
+        if (form) {
+            form.replaceWith(form.cloneNode(true));
+            const newForm = document.getElementById('chat-form');
+            newForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                await this.sendMessage();
+            });
+        }
 
-        fileBtn.addEventListener('click', () => {
-            fileInput.click();
-        });
+        if (fileBtn) {
+            fileBtn.replaceWith(fileBtn.cloneNode(true));
+            const newFileBtn = document.getElementById('file-btn');
+            newFileBtn.addEventListener('click', () => {
+                document.getElementById('file-input').click();
+            });
+        }
 
-        fileInput.addEventListener('change', (e) => {
-            this.handleFileSelect(e.target.files[0]);
-        });
+        if (fileInput) {
+            fileInput.replaceWith(fileInput.cloneNode(true));
+            const newFileInput = document.getElementById('file-input');
+            newFileInput.addEventListener('change', (e) => {
+                this.handleFileSelect(e.target.files[0]);
+            });
+        }
     }
 
     static handleFileSelect(file) {
